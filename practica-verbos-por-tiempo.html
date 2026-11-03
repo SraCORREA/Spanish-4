@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practica los verbos · Día de los Muertos</title>
+<style>
+:root{--pink:#E4572E;--purple:#1D4E6B;--orange:#F29E4C;--turq:#2A9D8F;--marigold:#E9C46A;--lime:#6A994E;--cream:#F4F1EA;--ink:#264653;--card:#FFFFFF;--muted:#5d6f77;--line:#dfe6e4;--help:#FBF7EE;--err:#B5472A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--pink:#F07A5A;--purple:#8CC4DA;--orange:#F6B06B;--turq:#4CC2B4;--marigold:#E9C46A;--lime:#8DBE6B;--cream:#14212A;--ink:#EAF2F0;--card:#1F2F38;--muted:#A9BCC0;--line:#34474F;--help:#2A3B44;--err:#F0A38C}}
+:root[data-theme="dark"]{--pink:#F07A5A;--purple:#8CC4DA;--orange:#F6B06B;--turq:#4CC2B4;--marigold:#E9C46A;--lime:#8DBE6B;--cream:#14212A;--ink:#EAF2F0;--card:#1F2F38;--muted:#A9BCC0;--line:#34474F;--help:#2A3B44;--err:#F0A38C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Nunito,system-ui,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.4;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card);border-left:7px solid var(--pink);border-radius:12px;padding:10px 12px}
+h1{margin:0;font-size:20px;color:var(--pink)}
+h2{margin:0 0 8px;font-size:16px;color:var(--purple)}
+.sub{font-size:13px;color:var(--muted)}
+.ghost{background:none;border:2px solid var(--line);color:var(--ink);border-radius:9px;padding:6px 9px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+.panel{background:var(--card);border-radius:12px;padding:14px;margin-top:12px;border-top:6px solid var(--pink)}
+.banner{background:var(--marigold);color:#264653;font-weight:800;border-radius:9px;padding:6px 10px;margin-top:10px;text-align:center}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--purple);color:#fff;text-align:left;padding:6px;font-size:13px}
+td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}
+td.en{color:var(--muted);font-style:italic}
+.btn{display:inline-block;background:var(--turq);color:#fff;font:inherit;font-weight:800;border:0;font-size:15px;padding:10px 16px;border-radius:10px;margin-top:10px;cursor:pointer;text-decoration:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+label{display:block;font-weight:800}
+input{width:100%;font:inherit;font-size:18px;padding:10px;border:2px solid var(--purple);border-radius:10px;background:var(--card);color:var(--ink);margin-top:8px}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar div{height:100%;background:linear-gradient(90deg,var(--pink),var(--orange),var(--marigold));transition:width .3s}
+.lbl{font-size:12px;color:var(--muted);margin-top:8px}
+.bold{font-size:24px;font-weight:900;margin-top:6px}
+.tense{display:inline-block;font-size:12px;font-weight:800;padding:2px 9px;border-radius:999px;color:#fff}
+.t-presente{background:var(--lime)}
+.t-pretérito{background:var(--pink)}
+.t-imperfecto{background:var(--turq)}
+.t-futuro{background:var(--orange)}
+.t-condicional{background:var(--purple)}
+.wrong{color:var(--err);font-weight:800;font-size:14px;margin-top:8px}
+.help{background:var(--help);border:2px dashed var(--marigold);border-radius:10px;padding:10px;margin-top:10px;font-size:14px}
+.help b{color:var(--purple)}
+.ans-teacher{margin-top:8px;font-size:14px;color:var(--muted)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.opt{margin-top:0;background:var(--card);color:var(--ink);border:2px solid var(--purple);font-size:17px}
+.report{white-space:pre-line;font-size:14px;background:var(--help);border-radius:10px;padding:10px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>Practica los verbos</h1><div class="sub">Día de los Muertos · Español 4</div></div>
+    <button id="theme" class="ghost" type="button">Modo oscuro</button>
+  </header>
+  <div id="teacher" class="banner" hidden>Modo maestra</div>
+  <main id="app"></main>
+</div>
+<script>
+const DATA = {"V": {"recordar": {"presente": ["recuerdo", "recuerdas", "recuerda", "recordamos", "recuerdan"], "pretérito": ["recordé", "recordaste", "recordó", "recordamos", "recordaron"], "imperfecto": ["recordaba", "recordabas", "recordaba", "recordábamos", "recordaban"], "futuro": ["recordaré", "recordarás", "recordará", "recordaremos", "recordarán"], "condicional": ["recordaría", "recordarías", "recordaría", "recordaríamos", "recordarían"]}, "traer": {"presente": ["traigo", "traes", "trae", "traemos", "traen"], "pretérito": ["traje", "trajiste", "trajo", "trajimos", "trajeron"], "imperfecto": ["traía", "traías", "traía", "traíamos", "traían"], "futuro": ["traeré", "traerás", "traerá", "traeremos", "traerán"], "condicional": ["traería", "traerías", "traería", "traeríamos", "traerían"]}, "cocinar": {"presente": ["cocino", "cocinas", "cocina", "cocinamos", "cocinan"], "pretérito": ["cociné", "cocinaste", "cocinó", "cocinamos", "cocinaron"], "imperfecto": ["cocinaba", "cocinabas", "cocinaba", "cocinábamos", "cocinaban"], "futuro": ["cocinaré", "cocinarás", "cocinará", "cocinaremos", "cocinarán"], "condicional": ["cocinaría", "cocinarías", "cocinaría", "cocinaríamos", "cocinarían"]}, "decorar": {"presente": ["decoro", "decoras", "decora", "decoramos", "decoran"], "pretérito": ["decoré", "decoraste", "decoró", "decoramos", "decoraron"], "imperfecto": ["decoraba", "decorabas", "decoraba", "decorábamos", "decoraban"], "futuro": ["decoraré", "decorarás", "decorará", "decoraremos", "decorarán"], "condicional": ["decoraría", "decorarías", "decoraría", "decoraríamos", "decorarían"]}, "prender": {"presente": ["prendo", "prendes", "prende", "prendemos", "prenden"], "pretérito": ["prendí", "prendiste", "prendió", "prendimos", "prendieron"], "imperfecto": ["prendía", "prendías", "prendía", "prendíamos", "prendían"], "futuro": ["prenderé", "prenderás", "prenderá", "prenderemos", "prenderán"], "condicional": ["prendería", "prenderías", "prendería", "prenderíamos", "prenderían"]}, "poner": {"presente": ["pongo", "pones", "pone", "ponemos", "ponen"], "pretérito": ["puse", "pusiste", "puso", "pusimos", "pusieron"], "imperfecto": ["ponía", "ponías", "ponía", "poníamos", "ponían"], "futuro": ["pondré", "pondrás", "pondrá", "pondremos", "pondrán"], "condicional": ["pondría", "pondrías", "pondría", "pondríamos", "pondrían"]}, "extrañar": {"presente": ["extraño", "extrañas", "extraña", "extrañamos", "extrañan"], "pretérito": ["extrañé", "extrañaste", "extrañó", "extrañamos", "extrañaron"], "imperfecto": ["extrañaba", "extrañabas", "extrañaba", "extrañábamos", "extrañaban"], "futuro": ["extrañaré", "extrañarás", "extrañará", "extrañaremos", "extrañarán"], "condicional": ["extrañaría", "extrañarías", "extrañaría", "extrañaríamos", "extrañarían"]}, "ser": {"presente": ["soy", "eres", "es", "somos", "son"], "pretérito": ["fui", "fuiste", "fue", "fuimos", "fueron"], "imperfecto": ["era", "eras", "era", "éramos", "eran"], "futuro": ["seré", "serás", "será", "seremos", "serán"], "condicional": ["sería", "serías", "sería", "seríamos", "serían"]}, "tener": {"presente": ["tengo", "tienes", "tiene", "tenemos", "tienen"], "pretérito": ["tuve", "tuviste", "tuvo", "tuvimos", "tuvieron"], "imperfecto": ["tenía", "tenías", "tenía", "teníamos", "tenían"], "futuro": ["tendré", "tendrás", "tendrá", "tendremos", "tendrán"], "condicional": ["tendría", "tendrías", "tendría", "tendríamos", "tendrían"]}, "hacer": {"presente": ["hago", "haces", "hace", "hacemos", "hacen"], "pretérito": ["hice", "hiciste", "hizo", "hicimos", "hicieron"], "imperfecto": ["hacía", "hacías", "hacía", "hacíamos", "hacían"], "futuro": ["haré", "harás", "hará", "haremos", "harán"], "condicional": ["haría", "harías", "haría", "haríamos", "harían"]}, "rezar": {"presente": ["rezo", "rezas", "reza", "rezamos", "rezan"], "pretérito": ["recé", "rezaste", "rezó", "rezamos", "rezaron"], "imperfecto": ["rezaba", "rezabas", "rezaba", "rezábamos", "rezaban"], "futuro": ["rezaré", "rezarás", "rezará", "rezaremos", "rezarán"], "condicional": ["rezaría", "rezarías", "rezaría", "rezaríamos", "rezarían"]}}, "GROUPS": [["Grupo 1: regulares", ["cocinar", "decorar", "extrañar", "rezar", "prender"]], ["Grupo 2: irregulares", ["tener", "hacer", "poner", "traer", "ser"]], ["Grupo 3: cambio de raíz", ["recordar"]]]};
+const SUBJ = ["yo","tú","él/ella","nosotras","ellas"];
+const TENSES = ["presente","pretérito","imperfecto","futuro","condicional"];
+const TCLS = {presente:"t-presente",pretérito:"t-pretérito",imperfecto:"t-imperfecto",futuro:"t-futuro",condicional:"t-condicional"};
+const ALLV = Object.keys(DATA.V);
+const VOCAB = [
+  ["recordar","to remember","Recordamos a nuestros antepasados."],
+  ["traer","to bring","Traigo la foto de mi abuela."],
+  ["cocinar","to cook","Mi abuela cocinaba pan de muerto."],
+  ["decorar","to decorate","Decoramos el altar con papel picado."],
+  ["prender","to light","Prendo una vela cada noviembre."],
+  ["poner","to put, to place","Pongo las flores en el segundo nivel."],
+  ["extrañar","to miss (someone)","Extraño a mi abuela."],
+  ["ser","to be (identity, traits)","Mi abuela era muy cariñosa."],
+  ["tener","to have","Tengo una foto de mi perrita."],
+  ["hacer","to do, to make","Hice una ofrenda para mi tía."],
+  ["rezar","to pray","Rezamos por las almas."]
+];
+const TEACHER = new URLSearchParams(location.search).get("teacher") === "1";
+const IRR = DATA.GROUPS[1][1];
+const GLABEL = ["Vocabulario: significado","Verbos en presente","Verbos en pretérito","Verbos en imperfecto","Verbos en futuro","Verbos en condicional","Repaso mixto"];
+const PER = [11,20,20,20,20,20,30];
+const S = {name:"", phase:"start", gi:0, queue:[], cur:null, done:0, total:0, msg:"", stats:PER.map(()=>({att:0,helpN:0}))};
+let uid = 0;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function combos(verbs, tenses){const out=[];verbs.forEach(v=>tenses.forEach(t=>[0,1,2,3,4].forEach(si=>out.push([v,t,si]))));return shuffle(out)}
+function mk(x,g){return {id:++uid,type:"verb",verb:x[0],tense:x[1],si:x[2],ans:DATA.V[x[0]][x[1]][x[2]],group:g,wrongs:0,helpMode:false,helped:false}}
+function norm(s){return s.trim().replace(/\s+/g," ").toLowerCase()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function buildGroup(g){
+  if(g===0){
+    return shuffle(VOCAB.map(r=>{
+      const others=shuffle(VOCAB.map(x=>x[0]).filter(v=>v!==r[0])).slice(0,3);
+      return {id:++uid,type:"vocab",verb:r[0],meaning:r[1],ans:r[0],opts:shuffle([r[0]].concat(others)),group:0,wrongs:0,helpMode:false,helped:false};
+    }));
+  }
+  if(g<=5) return combos(ALLV,[TENSES[g-1]]).slice(0,20).map(x=>mk(x,g));
+  return combos(ALLV,TENSES).slice(0,30).map(x=>mk(x,6));
+}
+function startGroup(g){
+  S.phase="group"; S.gi=g; S.queue=buildGroup(g); S.total=S.queue.length; S.done=0; S.msg="";
+  nextItem();
+}
+function nextItem(){
+  S.msg="";
+  if(!S.queue.length){ S.cur=null; S.phase="between"; render(); return; }
+  S.phase="group";
+  S.cur=S.queue.shift(); S.cur.wrongs=0; S.cur.helpMode=false;
+  render();
+}
+function chooseVocab(v){
+  S.stats[0].att++;
+  if(v===S.cur.verb){ S.done++; nextItem(); }
+  else { S.msg="Inténtalo otra vez"; render(); }
+}
+function submit(){
+  const inp=document.getElementById("ans"); if(!inp) return;
+  const val=inp.value; if(!val.trim()) return;
+  const it=S.cur, st=S.stats[it.group], ok=norm(val)===norm(it.ans);
+  st.att++;
+  if(it.helpMode){
+    if(ok){
+      const pos=Math.min(S.queue.length,3+Math.floor(Math.random()*5));
+      S.queue.splice(pos,0,it);
+      nextItem();
+    } else {
+      S.msg="Todavía no es la forma correcta. Escríbela para continuar.";
+      render(val);
+    }
+    return;
+  }
+  if(ok){ S.done++; nextItem(); return; }
+  it.wrongs++;
+  if(it.wrongs<3){ S.msg="Inténtalo otra vez (intento "+(it.wrongs+1)+" de 3)"; render(val); return; }
+  it.helpMode=true;
+  if(!it.helped){ it.helped=true; st.helpN++; }
+  S.msg="";
+  render("");
+}
+function helpHTML(it){
+  const end=it.verb.slice(-2);
+  let pat;
+  if(it.tense==="futuro") pat="futuro: infinitivo + -é, -ás, -á, -emos, -án";
+  else if(it.tense==="condicional") pat="condicional: infinitivo + -ía, -ías, -ía, -íamos, -ían";
+  else {
+    const T={
+      presente:{ar:"-o, -as, -a, -amos, -an",er:"-o, -es, -e, -emos, -en"},
+      pretérito:{ar:"-é, -aste, -ó, -amos, -aron",er:"-í, -iste, -ió, -imos, -ieron"},
+      imperfecto:{ar:"-aba, -abas, -aba, -ábamos, -aban",er:"-ía, -ías, -ía, -íamos, -ían"}
+    };
+    pat=it.tense+", -"+end+": "+T[it.tense][end==="ar"?"ar":"er"];
+  }
+  let extra="";
+  if(it.verb==="recordar") extra="<br>Cambio de raíz en presente: o → ue (no en nosotras).";
+  else if(IRR.indexOf(it.verb)>=0) extra="<br>Verbo irregular: revisa la raíz o la terminación.";
+  return '<div class="help"><b>Ayuda:</b><br>'+esc(pat)+extra+'<br>Forma correcta: <b>'+esc(it.ans)+'</b><br>Escribe la forma correcta para continuar.</div>';
+}
+function startHTML(){
+  let saved=""; try{saved=localStorage.getItem("verbos-nombre")||""}catch(e){}
+  return '<section class="panel"><label for="name">Nombre</label><input id="name" autocomplete="off" value="'+esc(S.name||saved)+'"></section>'
+   + '<section class="panel"><h2>Paso 0 · Vocabulario</h2><table><tr><th>Verbo</th><th>English</th><th>Ejemplo</th></tr>'
+   + VOCAB.map(r=>'<tr><td><b>'+esc(r[0])+'</b></td><td class="en">'+esc(r[1])+'</td><td>'+esc(r[2])+'</td></tr>').join("")
+   + '</table></section>'
+   + '<button class="btn" id="begin" type="button">Ya leí el vocabulario</button>';
+}
+function progressHTML(){
+  const pct=S.total?Math.round(S.done/S.total*100):0;
+  return '<div class="lbl">'+esc(GLABEL[S.gi])+' · '+S.done+' de '+S.total+' correctas</div><div class="bar"><div style="width:'+pct+'%"></div></div>';
+}
+function itemHTML(prefill){
+  const it=S.cur;
+  if(it.type==="vocab"){
+    return '<section class="panel">'+progressHTML()
+     + '<div class="lbl">¿Qué verbo significa?</div>'
+     + '<div class="bold">'+esc(it.meaning)+'</div>'
+     + '<div class="opts">'+it.opts.map(o=>'<button class="btn opt" type="button" data-v="'+esc(o)+'">'+esc(o)+'</button>').join("")+'</div>'
+     + (S.msg?'<div class="wrong">'+esc(S.msg)+'</div>':'')
+     + (TEACHER?'<div class="ans-teacher">Respuesta: <b>'+esc(it.ans)+'</b></div>':'')
+     + '</section>';
+  }
+  return '<section class="panel">'+progressHTML()
+   + '<div class="bold">'+esc(it.verb)+'</div>'
+   + '<div class="lbl">Sujeto y tiempo</div>'
+   + '<div>'+SUBJ[it.si]+' · <span class="tense '+TCLS[it.tense]+'">'+it.tense+'</span></div>'
+   + '<input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" value="'+esc(prefill)+'" placeholder="'+(it.helpMode?'Escribe la forma correcta':'Tu respuesta')+'">'
+   + '<button class="btn" id="check" type="button">'+(it.helpMode?'Continuar':'Comprobar')+'</button>'
+   + (S.msg?'<div class="wrong">'+esc(S.msg)+'</div>':'')
+   + (it.helpMode?helpHTML(it):'')
+   + (TEACHER?'<div class="ans-teacher">Respuesta: <b>'+esc(it.ans)+'</b></div>':'')
+   + '</section>';
+}
+function betweenHTML(){
+  const st=S.stats[S.gi];
+  const btn = S.gi<6 ? "Siguiente: "+GLABEL[S.gi+1] : "Ver el reporte";
+  return '<section class="panel"><h2>'+esc(GLABEL[S.gi])+' terminado</h2>'
+   + '<div class="lbl">Intentos: '+st.att+' · Ítems con ayuda: '+st.helpN+'</div>'
+   + '<button class="btn" id="next" type="button">'+btn+'</button></section>';
+}
+function reportText(){
+  const lines=["Reporte: Practica los verbos (Día de los Muertos · Español 4)","Nombre: "+(S.name||"(sin nombre)"),"Fecha: "+new Date().toLocaleDateString("es-US"),""];
+  let att=0, h=0;
+  S.stats.forEach((st,i)=>{lines.push(GLABEL[i]+": "+st.att+" intentos, "+st.helpN+" ítems con ayuda"); att+=st.att; h+=st.helpN;});
+  lines.push("", "Total de ítems: "+PER.reduce((a,b)=>a+b,0), "Intentos totales: "+att, "Ítems con ayuda: "+h);
+  return lines.join("\n");
+}
+function reportHTML(){
+  const txt=reportText();
+  try{localStorage.setItem("verbos-reporte",txt)}catch(e){}
+  return '<section class="panel"><h2>Reporte</h2><div class="report">'+esc(txt)+'</div></section>'
+   + '<div class="row"><button class="btn" id="copy" type="button">Copiar</button>'
+   + '<button class="btn" id="dl" type="button">Descargar .txt</button>'
+   + '<a class="btn" id="mail" href="#">Enviar por correo</a>'
+   + '<button class="ghost" id="again" type="button">Empezar de nuevo</button></div>';
+}
+function bind(){
+  const b=id=>document.getElementById(id);
+  if(b("begin")) b("begin").onclick=()=>{
+    S.name=b("name").value.trim();
+    try{localStorage.setItem("verbos-nombre",S.name)}catch(e){}
+    startGroup(0);
+  };
+  document.querySelectorAll(".opt").forEach(btn=>btn.onclick=()=>chooseVocab(btn.getAttribute("data-v")));
+  if(b("check")) b("check").onclick=submit;
+  const inp=b("ans");
+  if(inp){ inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); submit(); } }); inp.focus(); }
+  if(b("next")) b("next").onclick=()=>{
+    if(S.gi<6) startGroup(S.gi+1);
+    else { S.phase="report"; render(); }
+  };
+  if(b("copy")) b("copy").onclick=()=>{
+    if(navigator.clipboard) navigator.clipboard.writeText(reportText()).then(()=>{b("copy").textContent="Copiado"}).catch(()=>{});
+  };
+  if(b("dl")) b("dl").onclick=()=>{
+    const blob=new Blob([reportText()],{type:"text/plain;charset=utf-8"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="reporte-verbos.txt"; a.click();
+  };
+  if(b("mail")) b("mail").href="mailto:cvcorrea@mcacubs.org?subject="+encodeURIComponent("Reporte de práctica de verbos")+"&body="+encodeURIComponent(reportText());
+  if(b("again")) b("again").onclick=()=>{
+    S.phase="start"; S.stats=PER.map(()=>({att:0,helpN:0})); S.msg=""; render();
+  };
+}
+function render(prefill){
+  const app=document.getElementById("app");
+  prefill=prefill||"";
+  if(S.phase==="start") app.innerHTML=startHTML();
+  else if(S.phase==="group") app.innerHTML=itemHTML(prefill);
+  else if(S.phase==="between") app.innerHTML=betweenHTML();
+  else app.innerHTML=reportHTML();
+  bind();
+}
+
+// tema
+(function(){
+  const root=document.documentElement, tb=document.getElementById("theme");
+  function isDark(){const t=root.getAttribute("data-theme"); return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches}
+  function label(){tb.textContent=isDark()?"Modo claro":"Modo oscuro"}
+  tb.onclick=()=>{const d=!isDark(); root.setAttribute("data-theme",d?"dark":"light"); try{localStorage.setItem("verbos-tema",d?"dark":"light")}catch(e){} label()};
+  try{const t=localStorage.getItem("verbos-tema"); if(t) root.setAttribute("data-theme",t)}catch(e){}
+  label();
+})();
+document.getElementById("teacher").hidden=!TEACHER;
+render();
+</script>
+</body>
+</html>
