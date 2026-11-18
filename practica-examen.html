@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Práctica · Examen semestral · Español IV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lav:#C4B6F7; --lav-2:#E9E3FD; --yel:#F2C641; --yel-2:#FFF4CC;
+    --ink:#120E09; --green:#2E9E5B; --green-2:#DDF3E6; --red:#C62A47; --red-2:#FBE3E8;
+    --gray:#5D5A66; --white:#FFFFFF;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--yel);color:var(--ink);font-family:Poppins,Arial,sans-serif;font-size:17px;line-height:1.55}
+  h1,h2,h3{font-family:"Dela Gothic One",Poppins,sans-serif;font-weight:400;margin:0}
+  a{color:inherit}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px}
+
+  /* hero with scalloped lavender blob */
+  .hero{background:var(--lav);margin:22px 0 0;border-radius:28px;padding:42px 22px 34px;text-align:center;position:relative;
+    -webkit-mask:radial-gradient(28px at 50% 28px,#0000 98%,#000) 50% -28px/56px 100% repeat-x,linear-gradient(#000 0 0);
+  }
+  .kicker{display:inline-block;background:var(--white);border-radius:999px;padding:6px 16px;font-weight:700;font-size:13px;letter-spacing:.5px}
+  .hero h1{font-size:clamp(34px,7vw,62px);line-height:1.05;margin:16px 0 8px}
+  .hero p{margin:0 auto;max-width:640px}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+  .pill{border-radius:999px;padding:8px 18px;font-weight:700;font-size:14px;background:var(--white)}
+  .pill.dark{background:var(--ink);color:#7BE09A}
+
+  nav.toc{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0 4px}
+  nav.toc a{text-decoration:none;background:var(--white);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px}
+  nav.toc a:hover,nav.toc a:focus{background:var(--ink);color:var(--yel)}
+
+  section.card{background:var(--white);border-radius:24px;padding:24px 22px;margin:22px 0;border:3px solid var(--ink)}
+  .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+  .num{width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--yel);display:grid;place-items:center;font-family:"Dela Gothic One";font-size:22px;flex:none}
+  .sec-head h2{font-size:clamp(22px,4vw,30px);flex:1}
+  .score{background:var(--lav-2);border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px;white-space:nowrap}
+  .rule{background:var(--yel-2);border-left:6px solid var(--yel);border-radius:12px;padding:12px 16px;margin:14px 0}
+  .rule b{display:block;font-size:13px;letter-spacing:.6px;margin-bottom:4px}
+  .ex{background:var(--green-2);border-left:6px solid var(--green);border-radius:12px;padding:10px 16px;margin:10px 0 16px;font-size:15px}
+  table.conj{border-collapse:collapse;margin:8px 0;font-size:15px;width:100%}
+  table.conj th,table.conj td{border:1px solid #D8D2F0;padding:6px 8px;text-align:left}
+  table.conj th{background:var(--lav-2)}
+
+  .q{border:2px solid var(--lav);border-radius:16px;padding:14px 16px;margin:12px 0;background:#FCFBFF}
+  .q.ok{border-color:var(--green);background:var(--green-2)}
+  .q.out{border-color:var(--red);background:var(--red-2)}
+  .q .prompt{font-weight:600;margin-bottom:8px}
+  .q .prompt .hint{font-weight:500;color:var(--gray);font-size:14px}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  input[type=text]{font:inherit;padding:8px 12px;border:2px solid var(--ink);border-radius:12px;min-width:200px;flex:1;max-width:320px}
+  button{font:inherit;font-weight:700;border:2px solid var(--ink);border-radius:999px;padding:8px 18px;background:var(--ink);color:var(--yel);cursor:pointer}
+  button.opt{background:var(--white);color:var(--ink);font-weight:600}
+  button.opt:hover:not(:disabled){background:var(--lav-2)}
+  button.opt.right{background:var(--green);border-color:var(--green);color:#fff}
+  button.opt.wrong{background:var(--red-2);border-color:var(--red);color:var(--red);text-decoration:line-through}
+  button:disabled{cursor:default;opacity:.95}
+  button.ghost{background:var(--white);color:var(--ink)}
+  .acc{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+  .acc button{padding:2px 10px;font-weight:600;background:var(--lav-2);color:var(--ink);border-width:1px}
+  .lives{font-size:14px;color:var(--gray);margin-top:6px}
+  .lives span{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--yel);border:2px solid var(--ink);margin-right:3px;vertical-align:-1px}
+  .lives span.used{background:#fff;border-color:#BBB}
+  .fb{margin-top:8px;font-size:15px}
+  .fb.good{color:var(--green);font-weight:600}
+  .fb.bad{color:var(--red);font-weight:600}
+  .fb .why{display:block;color:var(--ink);font-weight:500;margin-top:2px}
+  .passage{background:var(--lav-2);border-radius:16px;padding:16px 18px;margin:10px 0 14px}
+  .passage p{margin:0 0 10px}
+  .cloze select{font:inherit;font-weight:600;border:2px solid var(--ink);border-radius:10px;padding:2px 6px;background:#fff}
+  .cloze .blank{white-space:nowrap}
+  .cloze .tag{font-size:13px;color:var(--gray);font-weight:600}
+  .cloze select.right{border-color:var(--green);background:var(--green-2)}
+  .cloze select.wrong{border-color:var(--red);background:var(--red-2)}
+
+  /* diagnostic results */
+  .results{display:none}
+  .bar{height:12px;border-radius:999px;background:#EEE;overflow:hidden;flex:1;min-width:120px}
+  .bar i{display:block;height:100%;background:var(--green)}
+  .res-row{display:flex;align-items:center;gap:12px;margin:8px 0;flex-wrap:wrap}
+  .res-row .lbl{width:210px;font-weight:600}
+  .rec{background:var(--ink);color:#fff;border-radius:18px;padding:16px 18px;margin-top:14px}
+  .rec h3{color:var(--yel);font-size:20px;margin-bottom:6px}
+  .rec a.go{display:inline-block;margin:6px 6px 0 0;background:var(--yel);color:var(--ink);text-decoration:none;border-radius:999px;padding:6px 14px;font-weight:700}
+  footer{text-align:center;font-size:13px;padding:10px 0 40px}
+  .top{display:inline-block;margin-top:10px;font-size:14px;font-weight:600}
+  @media (max-width:560px){ .res-row .lbl{width:100%} input[type=text]{min-width:0;width:100%;max-width:none} section.card{padding:18px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero" id="inicio">
+    <span class="kicker">MOUNT CARMEL ACADEMY · ESPAÑOL IV HONORS</span>
+    <h1>Práctica<br>examen semestral</h1>
+    <p>El altar del Día de los Muertos · el bordado de Oaxaca · los cinco tiempos</p>
+    <div class="pills">
+      <span class="pill dark">Nivel IA 0 · AI Free</span>
+      <span class="pill">3 oportunidades por pregunta</span>
+      <span class="pill" id="totalPill">Puntos: 0</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Secciones">
+    <a href="#diagnostico">0 · Diagnóstico</a>
+    <a href="#presente">1 · Presente</a>
+    <a href="#preterito">2 · Pretérito</a>
+    <a href="#imperfecto">3 · Imperfecto</a>
+    <a href="#pretimp">4 · Pretérito o imperfecto</a>
+    <a href="#futuro">5 · Futuro</a>
+    <a href="#condicional">6 · Condicional</a>
+    <a href="#parrafo">7 · Completa el párrafo</a>
+    <a href="#vocabulario">8 · Vocabulario</a>
+    <a href="#lectura">9 · Lectura</a>
+    <a href="#cultura">10 · Cultura</a>
+  </nav>
+
+  <!-- DIAGNÓSTICO -->
+  <section class="card" id="diagnostico">
+    <div class="sec-head"><div class="num">0</div><h2>Test de diagnóstico</h2></div>
+    <p><b>Start here.</b> Answer these 13 questions. This is not a grade: <b>if you make a mistake, keep going</b> — you will not start over. At the end, you will see the parts you need to practice more, with a button that takes you directly there.</p>
+    <div id="diagQs"></div>
+    <button id="diagBtn">Ver mis resultados</button>
+    <div class="results" id="diagRes"></div>
+  </section>
+
+  <div id="sections"></div>
+
+  <footer>
+    <button class="ghost" id="resetBtn">Borrar mi práctica (el diagnóstico se queda)</button>
+    <p>Sra. Vaz Correa · Español IV Honors · Otoño 2026 · Textos originales para esta práctica.</p>
+  </footer>
+</div>
+
+<script>
+/* ================== DATA ================== */
+const SECTIONS = [
+ { id:"presente", n:1, title:"El presente",
+   rule:`<b>LA REGLA EN CORTO</b>Usamos el presente para hechos, rutinas y opiniones: <i>El Día de los Muertos <u>es</u> una tradición. Yo <u>bordo</u> los martes. Creo que <u>es</u> importante.</i>`,
+   table:[["","-ar (bordar)","-er (aprender)","-ir (vivir)"],["yo","bordo","aprendo","vivo"],["tú","bordas","aprendes","vives"],["ella / usted","borda","aprende","vive"],["nosotras","bordamos","aprendemos","vivimos"],["ellas / ustedes","bordan","aprenden","viven"]],
+   extra:`<b>Irregulares en «yo»:</b> tengo · pongo · hago · traigo · salgo &nbsp;·&nbsp; <b>o → ue:</b> recordar → recuerdo, recuerda (pero <i>recordamos</i>)`,
+   type:"type",
+   qs:[
+    ["(yo) bordar","Yo ___ una flor roja en mi tela.","bordo","Presente, -ar, yo: bord<b>o</b>."],
+    ["(nosotras) celebrar","Nosotras ___ el Día de los Muertos en noviembre.","celebramos","Presente, nosotras: celebr<b>amos</b>."],
+    ["(ella) decorar","Mi amiga ___ el altar con papel picado.","decora","Presente, ella: decor<b>a</b>."],
+    ["(yo) tener","Yo ___ un bastidor de seis pulgadas.","tengo","Irregular en yo: <b>tengo</b>."],
+    ["(yo) poner","Yo ___ la tela en el bastidor.","pongo","Irregular en yo: <b>pongo</b>."],
+    ["(ellas) aprender","Las hijas de Doña Rosa ___ a bordar en el taller.","aprenden","Presente, -er, ellas: aprend<b>en</b>."],
+    ["(yo) hacer","Yo ___ una ofrenda para mi abuelo.","hago","Irregular en yo: <b>hago</b>."],
+    ["(ella) recordar","Mi mamá ___ a su abuela con amor.","recuerda","o → ue: rec<b>ue</b>rda."],
+   ]},
+ { id:"preterito", n:2, title:"El pretérito",
+   rule:`<b>LA REGLA EN CORTO</b>Acción completa, un día concreto, un cambio. Palabras clave: <i>ayer · anoche · el viernes · un día · el año pasado · en 1929 · por primera vez · de repente</i>.`,
+   table:[["","-ar (bordar)","-er / -ir (aprender)"],["yo","bordé","aprendí"],["tú","bordaste","aprendiste"],["ella / usted","bordó","aprendió"],["nosotras","bordamos","aprendimos"],["ellas / ustedes","bordaron","aprendieron"]],
+   extra:`<b>Irregulares:</b> hacer → hice, hizo · traer → traje, trajo · poner → puse, puso · tener → tuve, tuvo · ser / ir → fui, fue &nbsp;·&nbsp; <b>Cambios en «yo»:</b> colocar → colo<b>qué</b> · pagar → pa<b>gué</b> · empezar → empe<b>cé</b>`,
+   type:"type",
+   qs:[
+    ["(yo) bordar","Ayer yo ___ mi primera flor.","bordé","Pretérito, -ar, yo: bord<b>é</b> (con acento)."],
+    ["(yo) colocar","El viernes yo ___ los pétalos en el altar.","coloqué","c → qu en yo: colo<b>qué</b>."],
+    ["(yo) empezar","El lunes yo ___ mi bordado.","empecé","z → c en yo: empe<b>cé</b>."],
+    ["(ella) aprender","Doña Rosa ___ a bordar a los siete años.","aprendió","Pretérito, -er, ella: aprend<b>ió</b>."],
+    ["(nosotras) decorar","Anoche nosotras ___ el altar de la clase.","decoramos","Pretérito, nosotras: decor<b>amos</b>."],
+    ["(yo) traer","Para el altar, yo ___ una foto de mi abuela.","traje","Irregular: <b>traje</b> (no «traí»)."],
+    ["(yo) hacer","El sábado yo ___ diez flores de papel.","hice","Irregular: <b>hice</b>."],
+    ["(ella) poner","Mi compañera ___ el pan de muerto en el nivel 3.","puso","Irregular: <b>puso</b>."],
+    ["(ella) ser","La exposición ___ un éxito.","fue","ser en pretérito: <b>fue</b>."],
+   ]},
+ { id:"imperfecto", n:3, title:"El imperfecto",
+   rule:`<b>LA REGLA EN CORTO</b>Descripción, hábito, edad y sentimientos en el pasado. Palabras clave: <i>siempre · todos los días · cuando era niña · mientras · los domingos</i>.`,
+   table:[["","-ar (bordar)","-er / -ir (tener)"],["yo","bordaba","tenía"],["tú","bordabas","tenías"],["ella / usted","bordaba","tenía"],["nosotras","bordábamos","teníamos"],["ellas / ustedes","bordaban","tenían"]],
+   extra:`<b>Solo tres irregulares:</b> ser → era · ir → iba · ver → veía`,
+   type:"type",
+   qs:[
+    ["(yo) bordar","Cuando yo era niña, ___ con mi abuela.","bordaba","Imperfecto, -ar, yo: bord<b>aba</b>."],
+    ["(ella) tener","Mi abuelo ___ un bigote grande.","tenía","Imperfecto, -er: ten<b>ía</b> (descripción)."],
+    ["(yo) vivir","Cuando era pequeña, yo ___ en Texas.","vivía","Imperfecto, -ir: viv<b>ía</b>."],
+    ["(ella) ser","Mi abuela ___ muy generosa.","era","ser en imperfecto: <b>era</b>."],
+    ["(nosotras) ir","Todos los domingos, nosotras ___ a misa.","íbamos","ir en imperfecto: <b>íbamos</b> (con acento)."],
+    ["(nosotras) celebrar","Siempre ___ la Navidad en casa de mis tíos.","celebrábamos","Nosotras -ar: celebr<b>ábamos</b> (con acento)."],
+    ["(ella) ver","Mi mamá ___ las fotos todas las tardes.","veía","ver en imperfecto: <b>veía</b>."],
+   ]},
+ { id:"pretimp", n:4, title:"¿Pretérito o imperfecto?",
+   rule:`<b>LA REGLA EN CORTO</b><b style="display:inline">Imperfecto</b> = cómo era (descripción, hábito, edad). &nbsp; <b style="display:inline">Pretérito</b> = qué pasó (una acción completa).`,
+   type:"mc",
+   qs:[
+    ["Cuando yo ___ niña, mi abuela bordaba todas las tardes.",["era","fui"],0,"Descripción / edad: <b>era</b>."],
+    ["Un día, mi mamá me ___ una aguja.",["daba","dio"],1,"«Un día» = una acción: <b>dio</b>."],
+    ["Todos los domingos, mi familia ___ a misa.",["iba","fue"],0,"Hábito («todos los domingos»): <b>iba</b>."],
+    ["Anoche, nosotras ___ el papel picado.",["colgamos","colgábamos"],0,"«Anoche» = acción completa: <b>colgamos</b>."],
+    ["Mi abuelo ___ muy alegre y simpático.",["fue","era"],1,"Descripción de la persona: <b>era</b>."],
+    ["El viernes, yo ___ la foto en el altar.",["coloqué","colocaba"],0,"Un día concreto: <b>coloqué</b>."],
+    ["Doña Rosa ___ siete años cuando bordó su primera flor.",["tuvo","tenía"],1,"Edad en el pasado: <b>tenía</b>."],
+    ["En 1929, Frida ___ con Diego Rivera.",["se casó","se casaba"],0,"Fecha + acción: <b>se casó</b>."],
+    ["Mientras yo bordaba, mi amiga ___ música.",["escuchaba","escuchó"],0,"«Mientras» = dos acciones en progreso: <b>escuchaba</b>."],
+    ["De repente, el hilo se ___.",["rompía","rompió"],1,"«De repente» = un cambio: <b>rompió</b>."],
+   ]},
+ { id:"futuro", n:5, title:"El futuro",
+   rule:`<b>LA REGLA EN CORTO</b>Lo que <u>va a pasar</u>. Infinitivo + <b>-é, -ás, -á, -emos, -án</b>. Pista en el examen: <b>(futuro)</b>.`,
+   table:[["","bordar","celebrar"],["yo","bordaré","celebraré"],["ella","bordará","celebrará"],["nosotras","bordaremos","celebraremos"],["ellas","bordarán","celebrarán"]],
+   extra:`<b>Raíces irregulares:</b> tener → tendr- · hacer → har- · poner → pondr- · decir → dir-  (tendré, haré, pondré, diré)`,
+   type:"type",
+   qs:[
+    ["(yo) visitar","Algún año, yo ___ San Antonino.","visitaré","Futuro, yo: visitar<b>é</b>."],
+    ["(nosotras) celebrar","El 2 de noviembre, nosotras ___ en el cementerio.","celebraremos","Futuro, nosotras: celebrar<b>emos</b>."],
+    ["(ella) terminar","Mi amiga ___ su bordado mañana.","terminará","Futuro, ella: terminar<b>á</b>."],
+    ["(yo) tener","El próximo año, yo ___ un bordado más grande.","tendré","Raíz irregular: <b>tendr</b>é."],
+    ["(yo) hacer","En diciembre, yo ___ un altar en casa.","haré","Raíz irregular: <b>har</b>é."],
+    ["(ella) poner","Mi mamá ___ flores en la ofrenda.","pondrá","Raíz irregular: <b>pondr</b>á."],
+   ]},
+ { id:"condicional", n:6, title:"El condicional",
+   rule:`<b>LA REGLA EN CORTO</b>Lo que <u>imaginas</u> o lo que harías. Infinitivo + <b>-ía, -ías, -ía, -íamos, -ían</b>. Pista en el examen: <b>(imaginar)</b>. Las mismas raíces irregulares: tendría, haría, pondría.`,
+   type:"mix",
+   qs:[
+    {t:"type", v:"(yo) visitar", s:"Con más tiempo, yo ___ Oaxaca.", a:"visitaría", why:"Condicional, yo: visitar<b>ía</b>."},
+    {t:"type", v:"(gustar)", s:"Me ___ aprender la técnica «hazme si puedes».", a:"gustaría", why:"me gustar<b>ía</b> = I would like."},
+    {t:"type", v:"(yo) comprar", s:"Yo ___ un huipil a una artesana, no una copia.", a:"compraría", why:"Condicional: comprar<b>ía</b>."},
+    {t:"type", v:"(yo) hacer", s:"Con más hilo, yo ___ un colibrí.", a:"haría", why:"Raíz irregular: <b>har</b>ía."},
+    {t:"mc", s:"El próximo año, yo ___ un altar en casa. (futuro)", o:["pondré","pondría"], a:0, why:"Pista (futuro): <b>pondré</b>."},
+    {t:"mc", s:"Algún día, me ___ visitar Oaxaca. (imaginar)", o:["gustará","gustaría"], a:1, why:"Pista (imaginar): <b>gustaría</b>."},
+    {t:"mc", s:"Mañana, nosotras ___ las flores de papel. (futuro)", o:["terminaremos","terminaríamos"], a:0, why:"Pista (futuro): <b>terminaremos</b>."},
+    {t:"mc", s:"Con más tiempo, yo ___ una blusa completa. (imaginar)", o:["bordaré","bordaría"], a:1, why:"Pista (imaginar): <b>bordaría</b>."},
+   ]},
+ { id:"parrafo", n:7, title:"Completa el párrafo",
+   rule:`<b>COMO EN EL EXAMEN</b>Lee el párrafo y elige la forma correcta de cada verbo. Piensa: ¿presente, pretérito, imperfecto, futuro o condicional?`,
+   type:"cloze",
+   title2:"Mi primera clase de bordado",
+   text:[
+     ["Cuando empecé la clase de bordado, yo no ",{v:"saber",o:["supe","sabía","sabré"],a:1,why:"Imperfecto: descripción de cómo era al principio."}," nada. El primer día, la profesora nos ",{v:"dar",o:["dio","daba","dará"],a:0,why:"Pretérito: una acción, «el primer día»."}," una aguja, hilo y tela. Yo ",{v:"estar",o:["estuve","estaré","estaba"],a:2,why:"Imperfecto: un sentimiento (nerviosa)."}," un poco nerviosa."],
+     ["Primero, yo ",{v:"dibujar",o:["dibujaba","dibujé","dibujaré"],a:1,why:"Pretérito: pasos completos (primero… luego…)."}," el diseño con un lápiz. Luego, ",{v:"bordar",o:["bordé","bordaba","bordo"],a:0,why:"Pretérito: acción completa."}," una flor roja."],
+     ["Hoy, mi bordado ",{v:"tener",o:["tenía","tiene","tuvo"],a:1,why:"Presente: «hoy»."}," tres flores y un colibrí. El próximo mes, yo lo ",{v:"terminar · futuro",o:["terminaría","terminé","terminaré"],a:2,why:"Pista (futuro): terminaré."},". Algún día, me ",{v:"gustar · imaginar",o:["gustaría","gustará","gustaba"],a:0,why:"Pista (imaginar): gustaría."}," aprender la técnica «hazme si puedes»."],
+   ]},
+ { id:"vocabulario", n:8, title:"Vocabulario: el bordado y el altar",
+   rule:`<b>COMO EN EL EXAMEN</b>Elige el significado correcto. Muchas palabras son del Quiz 1 y de la presentación del altar.`,
+   type:"mc",
+   qs:[
+    ["la aguja",["needle","thread","scissors"],0,"la aguja = needle."],
+    ["el hilo",["fabric","thread","pencil"],1,"el hilo = thread."],
+    ["el bastidor",["embroidery hoop","design","workshop"],0,"el bastidor = embroidery hoop."],
+    ["rellenar",["to cut","to sew","to fill in"],2,"rellenar = to fill in."],
+    ["hecho a mano",["handmade","machine-made","hand-washed"],0,"hecho a mano = handmade."],
+    ["el algodón",["wool","cotton","silk"],1,"el algodón = cotton."],
+    ["la ofrenda",["offering","office","oven"],0,"la ofrenda = offering (altar)."],
+    ["el mantel",["tablecloth","coat","candle"],0,"el mantel = tablecloth."],
+    ["el marco",["market","frame","mark"],1,"el marco = (photo) frame."],
+    ["extrañar",["to be strange","to miss (someone)","to extend"],1,"extrañar = to miss someone: «Extraño a mi abuela»."],
+    ["Completa: Pon la tela en el ___ antes de bordar.",["bastidor","marco","mantel"],0,"Pon la tela en el bastidor."],
+    ["Completa: ___ cortar el hilo con las tijeras.",["Tengo que","Tengo","Hay"],0,"tengo que + verbo = I have to."],
+   ]},
+ { id:"lectura", n:9, title:"Lectura: El altar de la clase",
+   type:"reading",
+   passage:[
+    "Me llamo Ana y estudio en una escuela católica de Nueva Orleans. En octubre, mi clase de español hizo un altar del Día de los Muertos. El altar tenía tres niveles. En el nivel 1 pusimos la cruz y las velas. En el nivel 2 colocamos las fotos de nuestros seres queridos. En el nivel 3 pusimos pan de muerto, agua y sal.",
+    "Yo traje una foto de mi abuela Carmen. Ella era muy generosa y le gustaba cocinar gumbo para toda la familia. ¡La extraño mucho!",
+    "Mi comité hizo el papel picado. Fue difícil porque el papel de china es muy frágil, pero el resultado fue espectacular.",
+    "Para mí, el Día de los Muertos es una tradición muy especial: es una celebración de la memoria y del amor. El 2 de noviembre, mi familia irá al cementerio y rezaremos por las almas."
+   ],
+   qs:[
+    ["¿Cuántos niveles tenía el altar?",["dos","tres","cinco"],1,"«El altar tenía tres niveles»."],
+    ["¿Qué colocaron en el nivel 2?",["las fotos","el pan de muerto","la cruz"],0,"«En el nivel 2 colocamos las fotos»."],
+    ["¿Cómo era la abuela Carmen?",["seria","tímida","generosa"],2,"«Ella era muy generosa»."],
+    ["¿Qué le gustaba hacer a la abuela?",["cocinar gumbo","bordar blusas","cantar en la iglesia"],0,"«le gustaba cocinar gumbo»."],
+    ["¿Por qué fue difícil el papel picado?",["porque no tenían tijeras","porque el papel es frágil","porque era muy grande"],1,"«el papel de china es muy frágil»."],
+    ["¿Qué hará la familia el 2 de noviembre?",["una fiesta de Halloween","irá al cementerio","comprará un altar"],1,"Futuro: «mi familia irá al cementerio»."],
+   ]},
+ { id:"cultura", n:10, title:"Cultura: ¿cierto o falso?",
+   rule:`<b>COMO EN EL EXAMEN</b>Lee cada frase sobre el Día de los Muertos y el bordado de Oaxaca. ¿Es <b style="display:inline">cierto</b> o <b style="display:inline">falso</b>?`,
+   type:"tf",
+   qs:[
+    ["El 2 de noviembre, en México, se recuerda a los adultos.",true,"Cierto: el 1 es para los niños («los angelitos») y el 2 para los adultos."],
+    ["El papel picado es fuerte y no se rompe.",false,"Falso: es frágil, como la vida."],
+    ["El cempasúchil guía a las almas con su color y su olor.",true,"Cierto."],
+    ["La foto del ser querido es lo menos importante del altar.",false,"Falso: ¡la foto es lo más importante!"],
+    ["En Nueva Orleans, el sacerdote bendice las tumbas en All Saints' Day.",true,"Cierto."],
+    ["El pan de muerto representa el ciclo de la vida.",true,"Cierto: se comparte en familia."],
+    ["La sal en la ofrenda representa la purificación.",true,"Cierto."],
+    ["Los colores originales de los textiles vienen de la naturaleza.",true,"Cierto: rojo de la cochinilla, azul del añil, morado del caracol del mar."],
+    ["El color azul viene del añil.",true,"Cierto."],
+    ["Frida Kahlo se vestía de tehuana, como las mujeres del Istmo de Tehuantepec, en Oaxaca.",true,"Cierto."],
+    ["Oaxaca tiene solamente un pueblo indígena.",false,"Falso: tiene 16 pueblos indígenas."],
+    ["Las marcas internacionales que copian los diseños siempre pagan a la comunidad.",false,"Falso: por eso México creó una ley en 2022."],
+    ["Doña Rosa aprendió a bordar con su mamá a los siete años.",true,"Cierto."],
+    ["Una blusa de San Antonino se hace a máquina en tres minutos.",false,"Falso: es hecha a mano y toma dos o tres meses."],
+    ["El Día de los Muertos es una celebración para recordar y honrar con amor.",true,"Cierto: no es «el Halloween mexicano»."],
+   ]},
+];
+
+const DIAG = [
+  {cat:"presente", s:"Ahora yo ___ (bordar) una flor.", o:["bordo","bordé","bordaba"], a:0},
+  {cat:"presente", s:"Yo ___ (poner) la tela en el bastidor.", o:["pone","pongo","ponía"], a:1},
+  {cat:"preterito", s:"Ayer yo ___ (traer) la foto para el altar.", o:["traía","traeré","traje"], a:2},
+  {cat:"preterito", s:"El viernes yo ___ (colocar) los pétalos.", o:["coloqué","colocé","colocaba"], a:0},
+  {cat:"imperfecto", s:"Cuando era niña, yo ___ (vivir) en Texas.", o:["viví","vivía","viviré"], a:1},
+  {cat:"imperfecto", s:"Mi abuelo ___ (ser) muy alegre.", o:["era","será","sería"], a:0},
+  {cat:"pretimp", s:"Todos los días, mi mamá ___ (bordar) en el patio.", o:["bordó","bordaba"], a:1},
+  {cat:"pretimp", s:"Un día, mi mamá me ___ (dar) una aguja.", o:["dio","daba"], a:0},
+  {cat:"futuro", s:"El próximo año, nosotras ___ (celebrar) en casa. (futuro)", o:["celebraríamos","celebramos","celebraremos"], a:2},
+  {cat:"condicional", s:"Algún día, me ___ (gustar) visitar Oaxaca. (imaginar)", o:["gustaría","gustará","gustaba"], a:0},
+  {cat:"vocabulario", s:"¿Qué es «el bastidor»?", o:["needle","embroidery hoop","thread"], a:1},
+  {cat:"cultura", s:"¿De dónde viene el color rojo de los textiles?", o:["del añil","de la cochinilla","del caracol del mar"], a:1},
+  {cat:"cultura", s:"El Día de los Muertos es un día para…", o:["recordar con amor","tener miedo","celebrar la Navidad"], a:0},
+];
+const CAT_NAMES = {presente:"Presente", preterito:"Pretérito", imperfecto:"Imperfecto", pretimp:"Pretérito o imperfecto", futuro:"Futuro", condicional:"Condicional", vocabulario:"Vocabulario", cultura:"Cultura"};
+const CAT_SECTION = {presente:"presente", preterito:"preterito", imperfecto:"imperfecto", pretimp:"pretimp", futuro:"futuro", condicional:"condicional", vocabulario:"vocabulario", cultura:"cultura"};
+
+/* ================== STORAGE ================== */
+const KEY = "es4-practica-examen-v1";
+let store = {};
+try { store = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { store = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+
+/* ================== HELPERS ================== */
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html="") => { const e = document.createElement(tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (html) e.innerHTML = html; return e; };
+const strip = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+const norm = (s) => s.trim().toLowerCase().replace(/\s+/g, " ").replace(/[.!¡?¿]/g, "");
+const MAX = 3;
+const sectionScore = {};
+function updateScores(){
+  let total = 0;
+  for (const id in sectionScore){ const s = sectionScore[id]; const b = $(`#score-${id}`); if (b) b.textContent = `${s.pts} / ${s.max}`; total += s.pts; }
+  $("#totalPill").textContent = `Puntos: ${total}`;
+}
+function livesHTML(used){ let h = ""; for (let i=0;i<MAX;i++) h += `<span class="${i<used?'used':''}"></span>`; return `${h} ${MAX-used} ${MAX-used===1?"oportunidad":"oportunidades"}`; }
+function record(secId, qKey, ok){
+  store[qKey] = ok ? "ok" : "out"; save();
+  if (ok) sectionScore[secId].pts++;
+  updateScores();
+}
+
+/* typed question */
+function typeQ(secId, qKey, verb, sentence, answer, why){
+  const box = el("div", {class:"q"});
+  const s = sentence.replace("___", `<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>`);
+  box.innerHTML = `<div class="prompt">${s} <span class="hint">${verb}</span></div>
+    <div class="row"><input type="text" aria-label="Respuesta" autocomplete="off" autocapitalize="off" spellcheck="false"><button>Revisar</button></div>
+    <div class="acc">${["á","é","í","ó","ú","ñ"].map(c=>`<button type="button" data-c="${c}">${c}</button>`).join("")}</div>
+    <div class="lives">${livesHTML(0)}</div><div class="fb" aria-live="polite"></div>`;
+  const inp = $("input", box), btn = $(".row button", box), fb = $(".fb", box), lv = $(".lives", box);
+  box.querySelectorAll(".acc button").forEach(b => b.onclick = () => { const p = inp.selectionStart ?? inp.value.length; inp.value = inp.value.slice(0,p) + b.dataset.c + inp.value.slice(p); inp.focus(); inp.setSelectionRange(p+1,p+1); });
+  let used = 0;
+  const finish = (ok) => { inp.disabled = true; btn.disabled = true; box.querySelectorAll(".acc button").forEach(b=>b.disabled=true); box.classList.add(ok?"ok":"out"); lv.style.display="none"; };
+  if (store[qKey]){ inp.value = answer; finish(store[qKey]==="ok"); fb.className="fb "+(store[qKey]==="ok"?"good":"bad"); fb.innerHTML = (store[qKey]==="ok"?"¡Correcto! ":"Respuesta: <b>"+answer+"</b> ")+`<span class="why">${why}</span>`; if (store[qKey]==="ok") sectionScore[secId].pts++; return box; }
+  const check = () => {
+    const v = norm(inp.value); if (!v) return;
+    const target = norm(answer);
+    if (v === target){ fb.className="fb good"; fb.innerHTML = `¡Correcto! <span class="why">${why}</span>`; finish(true); record(secId,qKey,true); return; }
+    used++;
+    if (used >= MAX){ fb.className="fb bad"; fb.innerHTML = `La respuesta es: <b>${answer}</b> <span class="why">${why}</span>`; finish(false); record(secId,qKey,false); return; }
+    lv.innerHTML = livesHTML(used);
+    fb.className = "fb bad";
+    fb.innerHTML = strip(v) === strip(target) ? "¡Casi! Revisa el acento (á é í ó ú)." : (used === 1 ? "Intenta otra vez. Revisa el tiempo y la persona." : `Pista: empieza con «${answer.slice(0,2)}…».`);
+    inp.select();
+  };
+  btn.onclick = check; inp.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
+  return box;
+}
+
+/* multiple-choice question */
+function mcQ(secId, qKey, prompt, options, correct, why){
+  const box = el("div", {class:"q"});
+  box.innerHTML = `<div class="prompt">${prompt.replace("___", "<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>")}</div><div class="row"></div><div class="lives">${livesHTML(0)}</div><div class="fb" aria-live="polite"></div>`;
+  const row = $(".row", box), fb = $(".fb", box), lv = $(".lives", box);
+  const btns = options.map((o, i) => { const b = el("button", {class:"opt", type:"button"}, o); row.appendChild(b); return b; });
+  const maxTries = Math.min(MAX, options.length - 1);
+  let used = 0;
+  const finish = (ok) => { btns.forEach(b => b.disabled = true); btns[correct].classList.add("right"); box.classList.add(ok?"ok":"out"); lv.style.display="none"; fb.className = "fb " + (ok?"good":"bad"); fb.innerHTML = (ok?"¡Correcto! ":`La respuesta es: <b>${options[correct]}</b>. `) + `<span class="why">${why}</span>`; };
+  if (store[qKey]){ finish(store[qKey]==="ok"); if (store[qKey]==="ok") sectionScore[secId].pts++; return box; }
+  lv.innerHTML = `${maxTries} ${maxTries===1?"oportunidad":"oportunidades"}`;
+  btns.forEach((b, i) => b.onclick = () => {
+    if (i === correct){ finish(true); record(secId,qKey,true); return; }
+    b.classList.add("wrong"); b.disabled = true; used++;
+    if (used >= maxTries){ finish(false); record(secId,qKey,false); return; }
+    const left = maxTries - used;
+    lv.innerHTML = `${left} ${left===1?"oportunidad":"oportunidades"}`;
+    fb.className = "fb bad"; fb.textContent = "Intenta otra vez.";
+  });
+  return box;
+}
+
+/* cloze with selects */
+function clozeBlock(sec){
+  const wrapD = el("div", {class:"passage cloze"});
+  wrapD.innerHTML = `<h3 style="font-size:20px;margin-bottom:8px">${sec.title2}</h3>`;
+  let n = 0; const blanks = [];
+  sec.text.forEach(par => {
+    const pEl = el("p");
+    par.forEach(seg => {
+      if (typeof seg === "string"){ pEl.appendChild(document.createTextNode(seg)); return; }
+      n++; const k = `${sec.id}-${n}`; const idx = n;
+      const span = el("span", {class:"blank"});
+      span.innerHTML = `<b>(${idx})</b> `;
+      const sel = el("select", {"aria-label":`Espacio ${idx}`});
+      sel.innerHTML = `<option value="">— elige —</option>` + seg.o.map((o,i)=>`<option value="${i}">${o}</option>`).join("");
+      span.appendChild(sel);
+      span.appendChild(el("span", {class:"tag"}, ` (${seg.v})`));
+      pEl.appendChild(span);
+      blanks.push({sel, seg, k, idx, used:0, done:false});
+    });
+    wrapD.appendChild(pEl);
+  });
+  const fb = el("div", {class:"fb", "aria-live":"polite"});
+  const btn = el("button", {}, "Revisar mis respuestas");
+  sectionScore[sec.id] = {pts:0, max:blanks.length};
+  const finishBlank = (b, ok) => { b.done = true; b.sel.disabled = true; b.sel.value = String(b.seg.a); b.sel.classList.remove("wrong"); b.sel.classList.add(ok?"right":"wrong"); };
+  blanks.forEach(b => { if (store[b.k]){ finishBlank(b, store[b.k]==="ok"); if (store[b.k]==="ok") sectionScore[sec.id].pts++; } });
+  btn.onclick = () => {
+    const msgs = [];
+    blanks.forEach(b => {
+      if (b.done || b.sel.value === "") return;
+      if (Number(b.sel.value) === b.seg.a){ finishBlank(b, true); record(sec.id, b.k, true); return; }
+      b.used++; b.sel.classList.add("wrong");
+      if (b.used >= MAX){ finishBlank(b, false); record(sec.id, b.k, false); msgs.push(`(${b.idx}) <b>${b.seg.o[b.seg.a]}</b> — ${b.seg.why}`); }
+      else msgs.push(`(${b.idx}) Intenta otra vez · ${MAX - b.used} ${MAX-b.used===1?"oportunidad":"oportunidades"}`);
+    });
+    const left = blanks.filter(b=>!b.done).length;
+    fb.className = "fb " + (msgs.length ? "bad" : "good");
+    fb.innerHTML = (msgs.length ? msgs.join("<br>") : (left ? "¡Bien! Completa los espacios que faltan." : "¡Terminaste el párrafo!"));
+  };
+  return [wrapD, btn, fb];
+}
+
+/* ================== BUILD SECTIONS ================== */
+const holder = $("#sections");
+SECTIONS.forEach(sec => {
+  const card = el("section", {class:"card", id:sec.id});
+  card.innerHTML = `<div class="sec-head"><div class="num">${sec.n}</div><h2>${sec.title}</h2><span class="score" id="score-${sec.id}"></span></div>`;
+  if (sec.rule) card.appendChild(el("div", {class:"rule"}, sec.rule));
+  if (sec.table){ const tb = el("table", {class:"conj"}); tb.innerHTML = sec.table.map((r,i)=>`<tr>${r.map(c=>i===0?`<th>${c}</th>`:`<td>${c}</td>`).join("")}</tr>`).join(""); card.appendChild(tb); }
+  if (sec.extra) card.appendChild(el("div", {class:"ex"}, sec.extra));
+  if (sec.type === "cloze"){
+    clozeBlock(sec).forEach(x => card.appendChild(x));
+  } else {
+    sectionScore[sec.id] = {pts:0, max:sec.qs.length};
+    if (sec.type === "reading"){ const pa = el("div", {class:"passage"}); pa.innerHTML = sec.passage.map(x=>`<p>${x}</p>`).join("") + `<p style="font-size:13px;color:#5D5A66;margin:0">Texto original escrito para esta práctica.</p>`; card.appendChild(pa); }
+    sec.qs.forEach((q, i) => {
+      const k = `${sec.id}-${i}`;
+      if (sec.type === "type") card.appendChild(typeQ(sec.id, k, q[0], q[1], q[2], q[3]));
+      else if (sec.type === "mc" || sec.type === "reading") card.appendChild(mcQ(sec.id, k, `${i+1}. ${q[0]}`, q[1], q[2], q[3]));
+      else if (sec.type === "tf") card.appendChild(mcQ(sec.id, k, `${i+1}. ${q[0]}`, ["Cierto","Falso"], q[1]?0:1, q[2]));
+      else if (sec.type === "mix") card.appendChild(q.t === "type" ? typeQ(sec.id, k, q.v, q.s, q.a, q.why) : mcQ(sec.id, k, q.s, q.o, q.a, q.why));
+    });
+  }
+  const again = el("button", {class:"ghost", type:"button", style:"margin-top:12px;margin-right:12px"}, "Practicar esta sección otra vez");
+  again.onclick = () => { Object.keys(store).forEach(k => { if (k.startsWith(sec.id + "-")) delete store[k]; }); save(); location.hash = sec.id; location.reload(); };
+  card.appendChild(again);
+  card.appendChild(el("a", {href:"#inicio", class:"top"}, "↑ Volver arriba · ver todas las secciones"));
+  holder.appendChild(card);
+});
+updateScores();
+
+/* ================== DIAGNOSTIC ================== */
+const dq = $("#diagQs"); const dAns = {};
+DIAG.forEach((q, i) => {
+  const box = el("div", {class:"q"});
+  box.innerHTML = `<div class="prompt">${i+1}. ${q.s.replace("___","<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>")}</div><div class="row"></div>`;
+  const row = $(".row", box);
+  q.o.forEach((o, j) => { const b = el("button", {class:"opt", type:"button"}, o); b.onclick = () => { row.querySelectorAll("button").forEach(x => { x.style.background=""; x.style.color=""; }); b.style.background = "#120E09"; b.style.color = "#F2C641"; dAns[i] = j; }; row.appendChild(b); });
+  dq.appendChild(box);
+});
+function lockDiag(ans){
+  dq.querySelectorAll(".q").forEach((box, i) => {
+    const btns = box.querySelectorAll("button");
+    btns.forEach((b, j) => { b.disabled = true; b.style.background = ""; b.style.color = "";
+      if (j === DIAG[i].a) b.classList.add("right");
+      else if (j === ans[i]) b.classList.add("wrong"); });
+  });
+  const btn = $("#diagBtn"); btn.disabled = true; btn.textContent = "Diagnóstico terminado ✓";
+}
+function showDiag(ans){
+  const res = $("#diagRes"); const by = {};
+  DIAG.forEach((q, i) => { by[q.cat] = by[q.cat] || {ok:0, n:0}; by[q.cat].n++; if (ans[i] === q.a) by[q.cat].ok++; });
+  const weak = Object.keys(by).filter(c => by[c].ok < by[c].n);
+  const total = DIAG.reduce((s,q,i)=>s+(ans[i]===q.a?1:0),0);
+  let h = `<h3 style="font-size:22px;margin:16px 0 6px">Tus resultados: ${total} / ${DIAG.length}</h3>`;
+  for (const c in by){ const pct = Math.round(100*by[c].ok/by[c].n); h += `<div class="res-row"><span class="lbl">${CAT_NAMES[c]}</span><div class="bar"><i style="width:${pct}%;background:${pct===100?'#2E9E5B':pct>=50?'#F2C641':'#C62A47'}"></i></div><span>${by[c].ok}/${by[c].n}</span></div>`; }
+  if (weak.length){
+    h += `<div class="rec"><h3>Debes practicar más esta parte de la gramática</h3><p style="margin:0 0 4px">Haz clic y ve directamente a la sección:</p>${weak.map(c=>`<a class="go" href="#${CAT_SECTION[c]}">${CAT_NAMES[c]} →</a>`).join("")}<p style="margin:10px 0 0;font-size:14px">Después, practica también el párrafo (7) y la lectura (9).</p></div>`;
+  } else {
+    h += `<div class="rec"><h3>¡Excelente!</h3><p style="margin:0 0 4px">Estás lista. Practica el examen completo:</p><a class="go" href="#parrafo">Completa el párrafo →</a><a class="go" href="#lectura">Lectura →</a><a class="go" href="#cultura">Cultura →</a></div>`;
+  }
+  res.innerHTML = h; res.style.display = "block";
+  lockDiag(ans);
+}
+$("#diagBtn").onclick = () => {
+  if (Object.keys(dAns).length < DIAG.length){ alert("Responde todas las preguntas del diagnóstico, por favor."); return; }
+  store.diag = dAns; save(); showDiag(dAns);
+  $("#diagRes").scrollIntoView({behavior:"smooth", block:"start"});
+};
+if (store.diag) showDiag(store.diag);
+
+$("#resetBtn").onclick = () => { if (confirm("¿Borrar tu práctica y empezar de nuevo? Tu diagnóstico se queda.")){ const d = store.diag; store = d ? {diag:d} : {}; save(); location.hash = ""; location.reload(); } };
+</script>
+</body>
+</html>
